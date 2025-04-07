@@ -978,7 +978,7 @@
     alert("🚫 Test Over! Your score is: " + score + "%");
 
     // Send mail via mailto (user needs to click manually)
-    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=4yousuraj@gmail.com.com&su=Test%20Score&body=The%20user%20scored%20${score}%25%20in%20the%20test.`;
+    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=4yousuraj@gmail.com&su=Test%20Score&body=The%20user%20scored%20${score}%25%20in%20the%20test.`;
     window.open(gmailLink, '_blank');
 
     // Optional: You can also disable the page interaction now if you want
@@ -1000,10 +1000,12 @@
   }
 
   // Warn if user right-clicks
-  document.addEventListener('contextmenu', function(e) {
+  document.addEventListener('mousedown', function(e) {
+  if (e.button === 2) { // 2 = Right mouse button
     e.preventDefault();
     showWarning("⚠️ Right-clicking is not allowed during the quiz.");
-  });
+  }
+});
 
   // Warn if user changes tab
   document.addEventListener('visibilitychange', function() {
@@ -1013,10 +1015,13 @@
   });
 
   // Warn if user tries to select text
-  document.addEventListener('selectstart', function(e) {
-    e.preventDefault();
-    showWarning("⚠️ Selecting text is not allowed during the quiz.");
-  });
+  document.addEventListener('selectionchange', function () {
+  const selection = document.getSelection();
+  if (selection && selection.toString().length > 0) {
+    showWarning("⚠️ Text selection is not allowed during the quiz.");
+    window.getSelection().removeAllRanges(); // Deselect the text immediately
+  }
+});
 </script>
   </script>
 </body>
