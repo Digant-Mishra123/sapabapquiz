@@ -956,72 +956,87 @@
       }
     }
     let warningCount = 0;
-  const maxWarnings = 2;
+const maxWarnings = 2;
 
-  // On page load, check if test is already over
-  if (localStorage.getItem('testOver') === 'true') {
-    endTest();
-  }
+// On page load, clear old test status to allow fresh attempt
+window.addEventListener('load', () => {
+  localStorage.removeItem('testOver');
+});
 
-  function showWarning(message) {
-    if (warningCount < maxWarnings) {
-      alert(message);
-      warningCount++;
-    } else {
-      endTest();
-    }
-  }
-
-  function endTest() {
-    const score = calculateScore();
-    localStorage.setItem('testOver', 'true');
-    alert("🚫 Test Over! Your score is: " + score + "%");
-
-    // Send mail via mailto (user needs to click manually)
-    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=4yousuraj@gmail.com&su=Test%20Score&body=The%20user%20scored%20${score}%25%20in%20the%20test.`;
-    window.open(gmailLink, '_blank');
-
-    // Optional: You can also disable the page interaction now if you want
-    document.body.innerHTML = "<h2>Test Over! Your score is sent to your email.</h2>";
-  }
-
-  function calculateScore() {
-    const questions = document.querySelectorAll('.question');
-    let correctAnswers = 0;
-    questions.forEach(question => {
-      const selected = question.querySelector('input[type="radio"]:checked');
-      if (selected && selected.value === "true") {
-        correctAnswers++;
-      }
-    });
-    const totalQuestions = questions.length;
-    const scorePercent = Math.round((correctAnswers / totalQuestions) * 100);
-    return scorePercent;
-  }
-
-  // Warn if user right-clicks
-  document.addEventListener('mousedown', function(e) {
+// Warn on right-click (only right-click, not left)
+document.addEventListener('mousedown', function(e) {
   if (e.button === 2) { // 2 = Right mouse button
     e.preventDefault();
     showWarning("⚠️ Right-clicking is not allowed during the quiz.");
   }
 });
 
-  // Warn if user changes tab
-  document.addEventListener('visibilitychange', function() {
-    if (document.visibilityState === 'hidden') {
-      showWarning("⚠️ Changing tabs is not allowed during the quiz.");
-    }
-  });
+// Warn on tab switching
+document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState === 'hidden') {
+    showWarning("⚠️ Changing tabs is not allowed during the quiz.");
+  }
+});
 
-  // Warn if user tries to select text
-  document.addEventListener('selectionchange', function () {
+// Warn if real text selection happens
+document.addEventListener('selectionchange', function () {
   const selection = document.getSelection();
   if (selection && selection.toString().length > 0) {
     showWarning("⚠️ Text selection is not allowed during the quiz.");
-    window.getSelection().removeAllRanges(); // Deselect the text immediately
+    selection.removeAllRanges(); // Remove the selected text
   }
 });
+
+function showWarning(message) {
+  if (localStorage.getItem('testOver') === 'true') {
+    return; // If test is already over, no need to warn
+  }
+  if (warningCount < maxWarnings) {
+    alert(message);
+    warningCount++;
+  } 
+  if (warningCount >= maxWarnings) {
+    endTest();
+  }
+}
+
+function calculateScore() {
+  let correct = 0;
+  let total = questions.length;
+
+  questions.forEach((q, idx) => {
+    const selectedOptions = Array.from(document.querySelectorAll(`input[name="q${idx}"]:checked`)).map(input => input.value);
+
+    if (arraysEqual(selectedOptions, q.answer)) {
+      correct++;
+    }
+  });
+
+  let percentage = (correct / total) * 100;
+  return percentage.toFixed(5); // Return with 2 decimal places
+}
+
+// Utility function to check if two arrays are equal
+function arraysEqual(a, b) {
+  if (a.length !== b.length) return false;
+  a = [...a].sort();
+  b = [...b].sort();
+  return a.every((val, index) => val === b[index]);
+}
+
+// End the test, show score, and prepare email
+function endTest() {
+  const score = calculateScore();
+  localStorage.setItem('testOver', 'true');
+  alert(`🚫 Test Over! Your score is: ${score}%`);
+
+  // Prepare Gmail mailto link
+  const subject = encodeURIComponent('Test Score');
+  const body = encodeURIComponent(`The user scored ${score}% in the test.`);
+  const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=cse.21bcsb24@silicon.ac.in&su=${subject}&body=${body}`;
+
+  window.open(gmailLink, '_blank');
+}
 </script>
   </script>
 </body>
