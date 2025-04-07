@@ -955,10 +955,10 @@
         result.innerHTML = `<span class='incorrect'>❌ Incorrect. Correct answer(s): ${correct}</span>`;
       }
     }
-  let warningCount = 0;
+    let warningCount = 0;
   const maxWarnings = 2;
 
-  // Check if test is already over
+  // On page load, check if test is already over
   if (localStorage.getItem('testOver') === 'true') {
     endTest();
   }
@@ -975,58 +975,48 @@
   function endTest() {
     const score = calculateScore();
     localStorage.setItem('testOver', 'true');
-    alert("🚫 Test Over! Your Score: " + score + "%");
+    alert("🚫 Test Over! Your score is: " + score + "%");
 
-    // Send score via mailto
-    const email = "4yousuraj@gmail.com"; // <-- Change to your email address
-    const subject = encodeURIComponent("Quiz Test Score");
-    const body = encodeURIComponent(`My test is over. My final score is: ${score}%`);
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    // Send mail via mailto (user needs to click manually)
+    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=4yousuraj@gmail.com.com&su=Test%20Score&body=The%20user%20scored%20${score}%25%20in%20the%20test.`;
+    window.open(gmailLink, '_blank');
 
-    // Optionally disable the whole page
-    document.body.innerHTML = "<h1 style='color: red; text-align: center;'>Test Over</h1>";
+    // Optional: You can also disable the page interaction now if you want
+    document.body.innerHTML = "<h2>Test Over! Your score is sent to your email.</h2>";
   }
 
-  // Detect right-click
-  document.addEventListener('contextmenu', function (e) {
+  function calculateScore() {
+    const questions = document.querySelectorAll('.question');
+    let correctAnswers = 0;
+    questions.forEach(question => {
+      const selected = question.querySelector('input[type="radio"]:checked');
+      if (selected && selected.value === "true") {
+        correctAnswers++;
+      }
+    });
+    const totalQuestions = questions.length;
+    const scorePercent = Math.round((correctAnswers / totalQuestions) * 100);
+    return scorePercent;
+  }
+
+  // Warn if user right-clicks
+  document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
     showWarning("⚠️ Right-clicking is not allowed during the quiz.");
   });
 
-  // Detect tab change
-  document.addEventListener('visibilitychange', function () {
+  // Warn if user changes tab
+  document.addEventListener('visibilitychange', function() {
     if (document.visibilityState === 'hidden') {
-      showWarning("⚠️ Switching tabs is not allowed during the quiz.");
+      showWarning("⚠️ Changing tabs is not allowed during the quiz.");
     }
   });
 
-  // Detect text selection
-  document.addEventListener('selectstart', function (e) {
+  // Warn if user tries to select text
+  document.addEventListener('selectstart', function(e) {
     e.preventDefault();
-    showWarning("⚠️ Text selection is not allowed during the quiz.");
+    showWarning("⚠️ Selecting text is not allowed during the quiz.");
   });
-
-  // Calculate dynamic score
-  function calculateScore() {
-    let correctAnswers = 0;
-    let totalQuestions = 0;
-
-    // Assume each question has class 'question' and correct option has class 'correct'
-    const questions = document.querySelectorAll('.question');
-
-    questions.forEach((question) => {
-      totalQuestions++;
-
-      const selectedOption = question.querySelector('input[type="radio"]:checked, input[type="checkbox"]:checked');
-
-      if (selectedOption && selectedOption.classList.contains('correct')) {
-        correctAnswers++;
-      }
-    });
-
-    if (totalQuestions === 0) return 0;
-    return Math.round((correctAnswers / totalQuestions) * 100); // Return percentage
-  }
 </script>
   </script>
 </body>
