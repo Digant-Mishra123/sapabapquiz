@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABAP Quiz - MCQ & MSQ</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      max-width: 800px; 
+      margin: auto; 
+      padding: 20px; 
+      background: linear-gradient(to right, #ae6ff2, #749ee7); /* Beautiful gradient background */
+      color: #fff; /* White text for better contrast */
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .question { 
+      margin-bottom: 25px; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
+      padding-bottom: 15px; 
+      background: rgba(255, 255, 255, 0.1); /* Semi-transparent background for questions */
+      border-radius: 8px; 
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+      transition: transform 0.2s; 
+      padding: 20px; /* Added padding for better spacing */
+    }
+    .question:hover {
+      transform: translateY(-5px);
+    }
+    .options { 
+      margin-left: 20px; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    .option {
+      background: rgba(255, 255, 255, 0.2); 
+      border-radius: 5px; 
+      margin: 5px 0; 
+      padding: 10px; 
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+      transition: transform 0.2s; 
+    }
+    .option:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.3);
+    }
+    .result { 
+      margin-top: 10px; 
+      font-weight: bold; 
+    }
+    .correct { color: #28a745; } /* Green for correct answers */
+    .incorrect { color: #dc3545; } /* Red for incorrect answers */
+    button { 
+      margin-top: 10px; 
+      padding: 10px 15px; 
+      border: none; 
+      background-color: #007bff; 
+      color: white; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      transition: background-color 0.3s;
+    }
+    button:hover { 
+      background-color: #0056b3; 
+    }
+  </style>
+</head>
+<body>
+  <h1>ABAP MCQ & MSQ Quiz</h1>
+
+  <div id="quiz"></div>
+
+  <script>
+    const questions = [
+      {
+        
+        type: "mcq",
+        question: "Which function call returns 0?",
+        options: [
+          "Count_any_of ( val - ‘ABAP ABAP abap' sub \"AB\" )",
+          "Count (val - 'ABAP ABAP abap' sub - 'AB' )",
+          "find_any_of (val = \"ABAP ABAP abap\" sub = \"AB\")",
+          "find_any_not_of( val 'ABAP ABAP abap’ sub = 'AB')"
+        ],
+        answer: ["C"]
+      },
+      {
+        type: "msq",
+        question: "In which products must you use the ABAP Cloud Development Model?Note: There are 2 correct answers to this question.",
+        options: [
+          "SAP S/4HANA Cloud, private edition",
+          "SAP BTP, ABAP environment",
+          "SAP S/4HANA on premise",
+          "SAP S/4HANA Cloud, public edition"
+        ],
+        answer: ["B", "D"]
+      },
+      {
+        type: "mcq",
+        question: "Which RESTful Application Programming object can be used to organize the display of fields in an app?",
+        options: ["Data model view", "Metadata extension", "Service definition", "Projection view"],
+        answer: ["B"]
+      },
+      {
+        type: "msq",
+        question: "When accessing the subclass instance through go_super, what can you do?  Note: There are 2 correct answers to this question.",
+        img:"images/img4.png",
+        options: [
+          "Access the inherited private components.",
+          "Access the inherited public components.",
+          "Call a subclass specific public method",
+          "Call inherited public redefined methods."
+        ],
+        answer: ["B", "D"]
+      },
+      {
+        type: "msq",
+        question: "Regarding line #6, which of the following are valid statements?",
+        img:"images/img5.png",
+        options: [
+          "ZF1' can be called only if it is released for cloud development.",
+          "ZF1' can be called if a wrapper is created for it and the wrapper itself is released for cloud development.",
+          "ZF1' can be called whether it is released or not for cloud development",
+          "ZF1' can be called if a wrapper is created for it but the wrapper itself is not released for cloud development."
+        ],
+        answer: ["A", "B"]
+      },
+      {
+        type: "msq",
+        question: "What are the effects of this annotation on system field attachment to CDS input param?",
+        img:"images/img6.png",
+        options: [
+          "It is no longer possible to pass your own value to the parameter.",
+          "You can still override the default value with a value of your own.",
+          "The value of sy-langu will be passed automatically in ABAP only.",
+          "The value of sy-langu will be passed automatically in ABAP and other CDS views."
+        ],
+        answer: ["B", "C"]
+      },
+      {
+        type: "mcq",
+        question: "What will be the data type of gv_result in: data (gv_result) = 1 / 8.",
+        options: ["TYPE I", "TYPE P DECIMALS 2", "TYPE DEFLOAT 16", "TYPE P DECIMALS 3"],
+        answer: ["A"]
+      },
+      {
+        type: "msq",
+        question: "What are valid statements?",
+        img:"images/img8.png",
+        options: [
+          "In class CL2, the interface method is named if1-m1.",
+          "Class CL2 uses the interface.",
+          "In class CL1, the interface method is named if-m1.",
+          "Class CL1 uses the interface.",
+          "Class CL1 implements the interface."
+        ],
+        answer: ["C", "D", "E"]
+      },
+      {
+        type: "msq",
+        question: "What will happen when executing these casts?",
+        img:"images/img9.png",
+        options: [
+          "go_sub1->sub1_meth1(…) will work.",
+          "go_sub2->sub2_meth1(...) will work.",
+          "go_sub1 = CAST #(go_super) will not work; go_sub2 = CAST #(go_super) will work.",
+          "go_sub1 = CAST #(go_super) will work; go_sub2 = CAST #(go_super) will not work."
+        ],
+        answer: ["A", "D"]
+      },
+      {
+        type: "mcq",
+        question: "Setting a field to read-only in which object makes it read-only in all RAP apps?",
+        options: ["Service definition", "Metadata extension", "Behaviour definition", "Projection view"],
+        answer: ["C"]
+      },
+
+  {
+    type: "msq",
+    question: "What are some features of a unique secondary key?",
+    options: [
+      "It is created with the first read access of a table.",
+      "It is created when a table is filled.",
+      "It is updated when the table is modified.",
+      "It is updated when the modified table is read again."
+    ],
+    answer: ["A", "C"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following results in faster access to internal tables?",
+    options: [
+      "In a sorted internal table, specifying the primary key partially from the left without gaps.",
+      "In a hashed internal table, specifying the primary key completely.",
+      "In a sorted internal table, specifying the primary key completely.",
+      "In a standard internal table, specifying the primary key partially from the left without gaps.",
+      "In a hashed internal table, specifying the primary key partially from the left without gaps."
+    ],
+    answer: ["A", "B", "C"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following can be used to replace '???' in the following CDS view entity with an input parameter? \n Define view entity Z_CONVERT \n With parameters currency : ???",
+    options: [
+      "A built-in ABAP Dictionary type",
+      "A data element",
+      "A built-in ABAP type",
+      "A component of an ABAP Dictionary structure"
+    ],
+    answer: ["A", "B"]
+  },
+  {
+    type: "msq",
+    question: "What is the correct sequence of execution in logical operations?",
+    options: [
+      "Addition (+) and Subtraction (-)",
+      "Numeric functions",
+      "Multiplication (*) and Division (/)"
+    ],
+    answer: ["B", "C", "A"]
+  },
+  {
+    type: "msq",
+    question: "In a subclass sub1, you want to redefine a component of a superclass super1. How do you achieve this?",
+    options: [
+      "You add the clause REDEFINITION to the component in sub1.",
+      "You implement the redefined component in sub1.",
+      "You implement the redefined component for a second time in super1.",
+      "You add the clause REDEFINITION to the component in super1."
+    ],
+    answer: ["A", "B"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following apply to the AUTHORITY-CHECK OBJECT statement?",
+    options: [
+      "AUTHORITY CHECK verifies whether a user is authorized for '/DWO/TRVL' with the listed field values.",
+      "If the user is authorized for 'CNTRY = 'DE' AND for 'ACTVT = '03' then the return code is 0.",
+      "If the user is NOT authorized for 'CNTRY' = 'DE' OR for 'ACTVT' = '03' then the program will terminate.",
+      "If the user is authorized for 'CNTRY = 'DE' then the return code is always 0."
+    ],
+    answer: ["A", "B"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following are valid sort operations for internal tables?",
+    options: [
+      "Sort a sorted table using SORT itab DESCENDING.",
+      "Sort a sorted table using SORT itab BY field1 ASCENDING field2 DESCENDING.",
+      "Sort a standard table using SORT itab ASCENDING.",
+      "Sort a standard table using SORT itab BY field1 field2.",
+      "Sort a standard table using SORT itab."
+    ],
+    answer: ["C", "D", "E"]
+  },
+  {
+    type: "mcq",
+    question: "Which statement can you use to change the contents of a row of data in an internal table?",
+    options: ["Append table", "Insert table", "Update table", "Modify table"],
+    answer: ["D"]
+  },
+  {
+    type: "msq",
+    question: "In an Access Control Object, which clauses are used?",
+    options: ["Where (to specify the access conditions)", "Return code (to assign the return code of the authority check)", "Define role (to specify the role name)", "Revoke (to remove access to the data source)", "Grant (to identify the data source)"],
+    answer: ["A", "C", "E"]
+  },
+  {
+    type: "mcq",
+    question: "You are designing the following select statement in ABAP Open SQL:To adhere to the most recent ABAP SQL syntax conventions from SAP, on which line must you insert the INTO TABLE @gt flights clause to complete the SQL statement?",
+    img:"images/img20.png",
+    options: ["#15", "#6", "#8", "#4"],
+    answer: ["A"]
+  },
+  {
+    type: "mcq",
+    question: "Given this code, with which predicate condition can you ensure that the CAST will work?",
+    img:"images/img21.png",
+    options: ["IS BOUND", "IS INSTANCE OF", "IS NOT INITIAL", "IS SUPPLIED"],
+    answer: ["B"]
+  },
+  {
+    type: "sequence",
+    question: "What is the sequence priority when evaluating a logical expression?",
+    options: ["NOT", "AND", "OR"],
+    answer: ["NOT", "AND", "OR"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following are parts of the definition of a new database table?",
+    options: ["Field list", "Extension", "Semantic table attributes", "Partitioning attributes"],
+    answer: ["A", "C"]
+  },
+  {
+    type: "msq",
+    question: "In a RESTful Application Programming application, in which objects do you bind a CDS view to create a value help?",
+    options: ["Data model view", "Service definition", "Behavior definition", "Projection view", "Metadata extension"],
+    answer: ["A", "C", "E"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following are incomplete ABAP types?",
+    options: ["P", "String", "C", "T"],
+    answer: ["A", "C"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following integration frameworks have been released for ABAP cloud development?",
+    options: ["OData services", "Business events", "SOAP consumption", "Business Add-ins (BAdIs)", "CDS Views"],
+    answer: ["A", "B", "C"]
+  },
+  {
+    type: "msq",
+    question: "Given this code, what are valid statements?",
+    img:"images/img27.png",
+    options: [
+      "Instead of go_cl1 = NEW #() you could use go_if1 = NEW #(...)",
+      "go_if1 may call method m2 with go_if->m2(...)",
+      "Instead of go_cl1 = NEW #(...) you could use go_if1 = NEW cl1(...)",
+      "go_if1 may call method m1 with go_if1->m1()",
+      "go_cl1 may call method m1 with go_d1->if1~m1()"
+    ],
+    answer: ["C", "D", "E"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following ABAP SQL statements are valid?",
+    options: [
+      "SELECT FROM /dmo/connection FIELDS MAX(distance) AS dist_max MIN(distance) AS dist_min INTO TABLE @DATA(It_hits).",
+      "SELECT FROM /dmo/connection FIELDS carrid, airpfrom GROUP BY carrid, connid INTO TABLE @DATA(It_hits).",
+      "SELECT FROM /dmo/connection FIELDS carrid airpfrom, MAX(distance) AS dist_max, MIN(distance) AS dist_min GROUP BY carrid, airpfrom INTO TABLE @DATA(It_hits)",
+      "SELECT FROM /dmo/connection FIELDS carrid, airpfrom, MAX(distance) AS dist_max, MIN(distance) AS dist_min INTO TABLE @DATA(It_hits)"
+    ],
+    answer: ["A", "C"]
+  },
+  {
+    type: "mcq",
+    question: "Given the following code in an SAP S/4HANA Cloud private edition tenant: The class zcl_demo_class is in a software component with the language version set to 'Standard ABAP'. The function module 'ZF1' is in a software component with the language version set to 'ABAP Cloud'. Both the class and function module are customer created. Regarding line #6, which of the following is a valid statement?",
+    img:"images/img29.png",
+    options: [
+      "'ZF1' can be called via a wrapper that itself has been released for cloud development.",
+      "'ZF1' must be released for cloud development to be called.",
+      "'ZF1' can be called via a wrapper that itself has not been released for cloud development.",
+      "'ZF1' can be called whether it has been released or not for cloud development."
+    ],
+    answer: ["B"]
+  },
+  {
+    type: "mcq",
+    question: "In ABAP SQL, which of the following retrieves the association field _Airline-Name of a CDS view?",
+    options: ["\_Airline-Name", "“_Airline Name", "/_Airline Name", "@_Airline-Name"],
+    answer: ["A"]
+  },
+  {
+    type: "mcq",
+    question: "Which internal table type allows unique and non-unique keys?",
+    options: ["Hashed", "Standard", "Sorted"],
+    answer: ["C"]
+  },
+  {
+    type: "msq",
+    question: "In ABAP SQL, which of the following can be assigned an alias?",
+    options: [
+      "field (from field list)",
+      "order criterion (from order by clause)",
+      "group criterion (from group by clause)",
+      "database table"
+    ],
+    answer: ["A", "D"]
+  },
+  {
+    type: "msq",
+    question: "Which patterns raise an exception?",
+    options: [
+      "DATA: gv_target TYPE d. CONSTANTS: gco_date TYPE d VALUE '20331233'. gv_target = EXACT #(gco_date).",
+      "DATA: gv_target TYPE c LENGTH 5. CONSTANTS: gco_string TYPE string VALUE '0123456789ABCDEF'. gv_target = EXACT #(gco_string+5(6)).",
+      "DATA: gv_target TYPE p DECIMALS 3. CONSTANTS: gco_int1 TYPE i VALUE 2. gv_target = EXACT #(2 / gco_int1).",
+      "DATA: gv_target TYPE string. CONSTANTS: gco_string TYPE string LENGTH 16 VALUE '0123456789ABCDEF'. gv_target = EXACT #(gco_string+5(5)).",
+      "DATA: gv_target TYPE p DECIMALS 2. CONSTANTS: gco_int1 TYPE i VALUE 3. gv_target = EXACT #(2 * gco_int1)."
+    ],
+    answer: ["A", "B", "C"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following are features of Core Data Services?",
+    options: [
+      "Associations",
+      "Inheritance",
+      "Annotations",
+      "Structured Query Language (SQL)",
+      "Delegation"
+    ],
+    answer: ["A", "C", "D"]
+  },
+  {
+    type: "msq",
+    question: "Why would you use Access Controls with CDS Views?",
+    options: [
+      "The system field sy-subrc is set, giving you the result of the authorization check",
+      "You do not have to remember to implement AUTHORITY CHECK statements.",
+      "All of the data from the data sources is loaded into your application automatically and filtered there according to the user's authorization.",
+      "Only the data corresponding to the user's authorization is transferred from the database to the application layer."
+    ],
+    answer: ["B", "D"]
+  },
+  {
+    type: "mcq",
+    question: "Which ABAP SQL clause allows the use of inline declarations?",
+    options: [
+      "INTO CORRESPONDING FIELDS OF",
+      "FROM",
+      "FIELDS",
+      "INTO"
+    ],
+    answer: ["D"]
+  },
+  {
+    type: "mcq",
+    question: "What RESTful Application Programming object contains only the fields required for a particular app?",
+    options: [
+      "Database view",
+      "Metadata extension",
+      "Projection view",
+      "Data model view"
+    ],
+    answer: ["C"]
+  },
+  {
+    type: "mcq",
+    question: "After you created a database table in the RESTful Application Programming model, what do you create next?",
+    options: [
+      "A projection view",
+      "A data model view",
+      "A metadata extension",
+      "A service definition"
+    ],
+    answer: ["B"]
+  },
+  {
+    type: "msq",
+    question: "In class ZCL_CLASS_A, you use the statement DATA var TYPE ***. What may stand in place of ***?",
+    options: [
+      "The name of a type defined privately in another class",
+      "The name of a domain from the ABAP Dictionary",
+      "The name of a type defined privately in class ZCL_CLASS_A",
+      "The name of a data element from the ABAP Dictionary"
+    ],
+    answer: ["C", "D"]
+  },
+  {
+    type: "mcq",
+    question: "Which extensibility type does SAP recommend you use to enhance the existing UI for an SAP Fiori app?",
+    options: [
+      "Key user",
+      "Developer",
+      "Side-by-side",
+      "Classic"
+    ],
+    answer: ["A"]
+  },
+  {
+    type: "mcq",
+    question: "In RESTful Application Programming, which EML statement retrieves an object?",
+    options: ["Read entity", "Get entity", "Find entity", "Select entity"],
+    answer: ["A"]
+  },
+  {
+    type: "msq",
+    question: "What are advantages of using a field symbol for internal table row access?",
+    options: [
+      "A MODIFY statement to write changed contents back to the table is not required.",
+      "Using a field symbol is faster than using a work area.",
+      "The row content is copied to the field symbol instead to a work area",
+      "The field symbol can be reused for other programs."
+    ],
+    answer: ["A", "B"]
+  },
+  {
+    type: "mcq",
+    question: "What is the purpose of a foreign key relationship between two tables in the ABAP Dictionary?",
+    options: [
+      "To create a corresponding foreign key relationship in the database",
+      "To ensure the integrity of data in the corresponding database tables",
+      "To document the relationship between the two tables"
+    ],
+    answer: ["B"]
+  },
+  {
+    type: "mcq",
+    question: "When processing an internal table with the statement LOOP AT itab... ENDLOOP, what system variable contains the current row number?",
+    options: ["sy-subrc", "sy-linno", "sy-index", "sy-tabix"],
+    answer: ["D"]
+  },
+  {
+    type: "msq",
+    question: "In what order are objects created to generate a RESTful Application Programming application?",
+    options: [
+      "A. A Database table",
+      "D. A Data model view",
+      "B. Service Binding Projection view",
+      "C. Service Definition"
+    ],
+    answer: ["A", "D", "B", "C"]
+  },
+  {
+    type: "msq",
+    question: "What are some of the reasons that Core Data Services are preferable to the classical approach to data modeling?",
+    options: [
+      "They compute results on the application server.",
+      "They transfer computational results to the application server.",
+      "They avoid data transfer completely.",
+      "They implement code pushdown."
+    ],
+    answer: ["B", "D"]
+  },
+  {
+    type: "mcq",
+    question: "What RESTful Application Programming feature is used to ensure the uniqueness of a semantic key?",
+    options: ["Validation", "Determination", "Action"],
+    answer: ["A"]
+  },
+  {
+    type: "msq",
+    question: "Given this code, what are valid statements?",
+    img:"images/img48.png",
+    options: [
+      "\"zcx1\" is a dictionary structure, and \"param1\" and \"param2\" are same-named components of this structure.",
+      "\"previous\" expects the reference to a previous exception",
+      "The code creates an exception object and raises an exception.",
+      "\"param1\" and \"param2\" are predefined names."
+    ],
+    answer: ["B", "C"]
+  },
+  {
+    type: "msq",
+    question: "Given this code, which of the following statements are correct?",
+    img:"images/img49.png",
+    options: [
+      "FOR defines a loop that runs over the content of source_itab",
+      "row is a predefined name and cannot be chosen arbitrarily.",
+      "source_itab is only visible within the loop.",
+      "row is only visible within the loop."
+    ],
+    answer: ["A", "D"]
+  },
+  {
+    type: "msq",
+    question: "For what kind of applications would you consider using on-stack developer extensions?",
+    options: [
+      "Applications that run separate from SAP S/4HANA",
+      "Applications that provide APIs for side by side SAP BTP apps",
+      "Applications that access SAP S/4HANA data using complex SQL",
+      "Applications that integrate data from several different systems"
+    ],
+    answer: ["B", "C"]
+  },
+  {
+    type: "mcq",
+    question: "Given the following Core Data Services View Entity Data Definition:\nYou want to provide a short description of the data definition for developers that will be attached to the database view. Which of the following annotations would do this if you inserted it on line #27?",
+    img:"images/img51.png",
+    options: [
+      "@EndUser Text label",
+      "@UI.badge.title.label",
+      "@EndUserText.quickInfo",
+      "@UI headerinto description label"
+    ],
+    answer: ["A"]
+  },
+  {
+    type: "msq",
+    question: "Given the following code, what are valid statements?",
+    img:"images/img52.png",
+    options: [
+      "The pragma is not checked by the syntax checker.",
+      "##NEEDED is checked by the syntax checker.",
+      "#EC_NEEDED is not checked by the syntax checker.",
+      "The pseudo-comment is checked by the syntax checker"
+    ],
+    answer: ["B", "C"]
+  },
+  {
+    type: "mcq",
+    question: "Given the following code in an SAP S/4HANA Cloud private edition tenant, regarding line #6, which of the following is a valid statement?",
+    img:"images/img53.png",
+    options: [
+      "'ZF1' must be released for cloud development to be called.",
+      "'ZF1' can be called via a wrapper that itself has not been released for cloud development.",
+      "'ZF1' can be called whether it has been released or not for cloud development.",
+      "'ZF1' can be called via a wrapper that itself has been released for cloud development."
+    ],
+    answer: ["D"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following types are permitted to be used for <source> on line #4 of a CDS View Entity Data Definition?",
+    img:"images/img54.png",
+    options: [
+      "An external view from the ABAP Dictionary",
+      "A database view from the ABAP Dictionary",
+      "A CDS DDIC-based view",
+      "A database table from the ABAP Dictionary"
+    ],
+    answer: ["C", "D"]
+  },
+  {
+    type: "msq",
+    question: "Which restrictions exist for ABAP SQL arithmetic expressions?",
+    options: [
+      "The operator is allowed only in floating point expressions.",
+      "The operator/is allowed only in floating point expressions.",
+      "Decimal types and integer types can NOT be used in the same expression.",
+      "Floating point types and integer types can NOT be used in the same expression."
+    ],
+    answer: ["B", "D"]
+  },
+  {
+    type: "msq",
+    question: "When does SAP recommend to use a sorted or a hashed table respectively?",
+    options: [
+      "A hashed table, when you read a single record and specify the complete key.",
+      "A sorted table, when you read a single record and specify non key fields.",
+      "A hashed table, when you read a subset in a loop and specify a part of the key from the left without gaps.",
+      "A sorted table, when you read a subset in a loop and specify a part of the key from the left without gaps."
+    ],
+    answer: ["A", "D"]
+  },
+  {
+    type: "msq",
+    question: "Which type of legacy code does SAP recommend you eliminate when you review modifications as part of an SAP S/4HANA system conversion?",
+    options: [
+      "Code that can be redesigned as a key user extension",
+      "Code that supports a critical business process",
+      "Code that now is identical to a standard SAP object",
+      "Code that has less than 10% usage according to usage statistics"
+    ],
+    answer: ["A", "C"]
+  },
+  {
+    type: "mcq",
+    question: "When processing a loop with the statement DO... ENDDO, what system variable contains the implicit loop counter?",
+    options: ["sy-linno", "sy-subrc", "sy-labix", "sy-index"],
+    answer: ["D"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following actions cause an indirect change to a database table requiring a table conversion?",
+    options: [
+      "Changing the field labels of a data element that is used in the table definition.",
+      "Shortening the length of a domain used in a data element that is used in the table definition.",
+      "Renaming a field in a structure that is included in the table definition",
+      "Deleting a field from a structure that is included in the table definition."
+    ],
+    answer: ["B", "D"]
+  },
+  {
+    type: "msq",
+    question: "Class super has subclass sub. Which rules are valid for the sub constructor?",
+    options: [
+      "Import parameters can only be evaluated after calling the constructor of super.",
+      "The constructor of super must be called before using any components of your own instance.",
+      "The method signature can be changed.",
+      "Events of your own instance cannot be raised before the registration of a handler in super."
+    ],
+    answer: ["B", "C"]
+  },
+  {
+    type: "msq",
+    question: "Which of the following string functions are predicate functions?",
+    options: [
+      "find_any_not_of()",
+      "contains_any_of()",
+      "matches()",
+      "count_any_of()"
+    ],
+    answer: ["B", "C"]
+  },
+  {
+    type: "msq",
+    question: "In RESTful Application Programming, a business object contains which parts?",
+    options: [
+      "Process definition",
+      "CDS view",
+      "Behavior definition",
+      "Authentication rules"
+    ],
+    answer: ["B", "C"]
+  },
+  {
+    type: "mcq",
+    question: "Given the following code excerpt that defines an SAP HANA database table, which field is defined incorrectly?",
+    img:"images/img63.png",
+    options: ["field2", "field4", "field1", "field3"],
+    answer: ["C"]
+  },
+  {
+    type: "mcq",
+    question: "In which sequence will the constructors be executed when an instance of sub1 is created?",
+    options: [
+      "Class constructor of super1",
+      "Instance constructor of sub1",
+      "Instance constructor of super1",
+      "Class constructor of sub1"
+    ],
+    answer: ["A", "D", "B", "C"]
+  },
+  {
+    type: "msq",
+    question: "What are some properties of database tables?",
+    options: [
+      "They can have any number of key fields.",
+      "They store information in two dimensions.",
+      "They may have key fields.",
+      "They can have relationships to other tables."
+    ],
+    answer: ["B", "D"]
+  },
+  {
+    type: "mcq",
+    question: "In a nested join, in which way is the join evaluated?",
+    img:"images/img66.png",
+    options: [
+      "From the left to the right in the order of the tables: a is joined with b, then b is joined with c.",
+      "From the top to the bottom in the order of the on conditions: b is joined with c, then a is joined with b.",
+      "From the bottom to the top in the order of the on conditions: a is joined with b, then b is joined with c.",
+      "From the right to the left in the order of the tables: b is joined with c, then b is joined with a."
+    ],
+    answer: ["B"]
+  },
+  {
+    type: "mcq",
+    question: "Which of the following statements would expose the field 'connid' in a Core Data Services View Entity?",
+    img:"images/img67.png",
+    options: [
+      "demo_ods_assoc_spfli.connid,",
+      "spfli-connid,",
+      "_spfli.connid,",
+      "demo_ods_assoc_spfli-connid,"
+    ],
+    answer: ["C"]
+  },
+  {
+    type: "mcq",
+    question: "Which extension type should be used to add a new button to an SAP Fiori app?",
+    options: [
+      "RAP BO Behavior Extension",
+      "SAP HANA database table extension",
+      "Business Service Extension",
+      "RAP BO Node Extension"
+    ],
+    answer: ["D"]
+  },
+  {
+    type: "msq",
+    question: "Which general settings should you set for the 'spfli' database table?",
+    img:"images/img69.png",
+    options: [
+      "'Load Unit' to 'Column Loadable'",
+      "'Load Unit' to 'Page Loadable'",
+      "'Storage Type' to 'Row Store'",
+      "'Storage Type' to 'Column Store'"
+    ],
+    answer: ["A", "D"]
+  },
+  {
+    type: "msq",
+    question: "What are some characteristics of secondary keys for internal tables?",
+    options: [
+      "Multiple secondary keys are allowed for any kind of internal table.",
+      "Secondary keys can only be created for standard tables.",
+      "Secondary keys must be chosen explicitly when you actually read from an internal table.",
+      "Hashed secondary keys do NOT have to be unique.",
+      "Sorted secondary keys do NOT have to be unique."
+    ],
+    answer: ["A", "C", "E"]
+  },
+  {
+    type: "msq",
+    question: "Which ABAP SQL snippets correctly provide a value for a CDS parameter?",
+    img:"images/img71.png",
+    options: [
+      "SELECT * FROM demo_cds_param_view_entity (p_date: $session.system_date)...",
+      "SELECT * FROM demo_cds_param_view_entity (p_date: '20238181')...",
+      "SELECT * FROM demo_cds_param_view_entity (p_date = @ (cl_abap_context_info->get_system_date ()))...",
+      "SELECT * FROM demo_cds_param_view_entity (p_date - '20230101')..."
+    ],
+    answer: ["C", "D"]
+  },
+  {
+    type: "mcq",
+    question: "Which ON condition must be inserted in place of '???' in the CDS definition?",
+    img:"images/img72.png",
+    options: [
+      "ON Z_Source1.carrier_id = Source2.carrier_id",
+      "ON Sprojection.carrier = Source2.carrier_id",
+      "ON $projection.carrier_id = _source2.carrier_id",
+      "ON Sprojection.carrier = Source2.carrier_id"
+    ],
+    answer: ["C"]
+  },
+  {
+    type: "msq",
+    question: "What is true when using 'itab1 = corresponding #( itab2 )'?",
+    options: [
+      "Fields with the same name and the same type will be copied from itab2 to itab1.",
+      "itab1 and itab2 must have at least one field name in common.",
+      "itab1 and itab2 must have the same data type.",
+      "Fields with the same name but with different types may be copied from itab2 to itab1."
+    ],
+    answer: ["B", "D"]
+  },
+  {
+    type: "mcq",
+    question: "What is the correct expression to change 'mr joe doe' into 'JOE' in an ABAP SQL field list?",
+    options: [
+      "SELECT FROM TABLE dbtab1 FIELDS f1, substring(upper('mr joe doe'), 4, 3) AS f2_sub_up, f3,...",
+      "SELECT FROM TABLE dbtab1 FIELDS f1, upper(left('mr joe doe', 6)) AS f2_up_left, f3,...",
+      "SELECT FROM TABLE dbtab1 FIELDS f1, substring(lower(upper('mr joe doe')), 4, 3) AS f2_sub_lo_up, f3,...",
+      "SELECT FROM TABLE dbtab1 FIELDS f1, left(lower(substring('mr joe doe', 4, 3)), 3) AS f2_left_lo_sub, f3,..."
+    ],
+    answer: ["A"]
+  },
+  {
+    type: "msq",
+    question: "Which data declarations will always work without truncation or rounding?",
+    options: [
+      "DATA gv_source TYPE p LENGTH 8 DECIMALS 3. DATA gv_target TYPE p LENGTH 16 DECIMALS 2.",
+      "DATA gv_source TYPE d. DATA gv_target TYPE string.",
+      "DATA gv_source TYPE c. DATA gv_target TYPE string.",
+      "DATA gv_source TYPE string. DATA gv_target TYPE c."
+    ],
+    answer: ["B", "C"]
+  },
+  {
+    type: "mcq",
+    question: "What will be the response when attempting to activate the given Core Data Service View Entity Data Definition?",
+    img:"images/img76.png",
+    options: [
+      "Activation error because the field names of the union do not match",
+      "Activation successful",
+      "Activation error because the field types of the union do not match",
+      "Activation error because the key fields of the union do not match"
+    ],
+    answer: ["D"]
+  },
+  {
+    type: "mcq",
+    question: "Which ABAP SQL statement selects the 'mat' field correctly?",
+    img:"images/img77.png",
+    options: [
+      "SELECT mat FROM demo_sales_so_i...",
+      "SELECT mat FROM demo_sales_cds_material_ve...",
+      "SELECT mat FROM demo_sales_cds_so_i_ve...",
+      "SELECT mat FROM Material..."
+    ],
+    answer: ["C"]
+  },
+  {
+    type: "mcq",
+    question: "Which of the following is a generic internal table type?",
+    options: [
+      "SORTED TABLE",
+      "HASHED TABLE",
+      "INDEX TABLE",
+      "STANDARD TABLE"
+    ],
+    answer: ["C"]
+  },
+  {
+    type: "mcq",
+    question: "What variable type is 'connection_full' based on the given CDS view?",
+    options: [
+      "Simple variable",
+      "Internal table",
+      "Structure"
+    ],
+    answer: ["C"]
+  },
+  {
+    "type": "msq",
+    "question": "In the following ABAP SQL code, what are valid case distinctions? Note: There are 2 correct answers to this question.",
+    "options": [
+      "SELECT FROM dbtab1 FIELDS F1, CASE WHEN F2 = '1' THEN 'Value 1 WHEN f2'2' THEN 'Value 2' ELSE \"Value for the rest\' END AS f_case INTO TABLE @et_t1.",
+      "SELECT FROM dbtab1 FIELDS F1, CASE WHEN F2 = '1' THEN \"Value 1' WHEN f2 < f3 AND f2 = ‘2’ THEN \"Value 2' WHEN OTHERS 'Value for the rest' ENDCASE AS f_case INTO TABLE @gt_t1.",
+      "SELECT FROM dbtab1 FIELDS f1, CASE f2 WHEN ‘1’ THEN 'Value 1' WHEN '2' THEN 'Value 2' ELSE \"Value for the rest' END AS f_case INTO TABLE @gt_t1.",
+      "SELECT FROM dbtab1 FIELDS F1, CASE f2, WHEN ‘1’ THEN 'Value 1', WHEN ‘2’ THEN 'Value 2', WHEN OTHERS \"Value for the rest', ENDCASE AS f_case INTO TABLE @gt_t1."
+    ],
+    "answer": ["A", "C"]
+      },
+      
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // Shuffle questions on every refresh
+    shuffle(questions);
+
+    const quizDiv = document.getElementById("quiz");
+
+    questions.forEach((q, index) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.dataset.type = q.type;
+      div.dataset.answer = q.answer.join(',');
+
+      shuffle(q.options); // Shuffle options
+
+      let html = `<p><strong>Q${index + 1}: ${q.question}</strong></p><div class="options">`;
+        if (q.img) {
+            html += `<img src="${q.img}" alt="Question Image" />`;
+        }
+      q.options.forEach((opt, i) => {
+        const letter = String.fromCharCode(65 + i);
+        const inputType = q.type === "mcq" ? "radio" : "checkbox";
+        const nameAttr = q.type === "mcq" ? `name="q${index}"` : "";
+        html += `<label class="option"><input type="${inputType}" value="${letter}" ${nameAttr}/> ${letter}. ${opt}</label>`;
+      });
+      html += `</div><button onclick="checkAnswer(this)">Check Answer</button><div class="result"></div>`;
+      div.innerHTML = html;
+      quizDiv.appendChild(div);
+    });
+
+    function checkAnswer(button) {
+      const container = button.parentElement;
+      const type = container.dataset.type;
+      const correct = container.dataset.answer.split(',').sort().join(',');
+      const result = container.querySelector('.result');
+      let selected;
+
+      if (type === 'mcq') {
+        const checked = container.querySelector('input[type=radio]:checked');
+        if (!checked) return result.innerHTML = "<span class='incorrect'>Please select an option.</span>";
+        selected = checked.value;
+      } else {
+        const checkboxes = container.querySelectorAll('input[type=checkbox]');
+        selected = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value).sort().join(',');
+      }
+
+      // Disable all inputs after checking the answer
+      const inputs = container.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.disabled = true; // Disable the input
+      });
+
+      if (selected === correct) {
+        result.innerHTML = "<span class='correct'>✅ Correct!</span>";
+      } else {
+        result.innerHTML = `<span class='incorrect'>❌ Incorrect. Correct answer(s): ${correct}</span>`;
+      }
+    }
+  let warningCount = 0;
+  const maxWarnings = 2;
+
+  // Check if test is already over
+  if (localStorage.getItem('testOver') === 'true') {
+    endTest();
+  }
+
+  function showWarning(message) {
+    if (warningCount < maxWarnings) {
+      alert(message);
+      warningCount++;
+    } else {
+      endTest();
+    }
+  }
+
+  function endTest() {
+    const score = calculateScore();
+    localStorage.setItem('testOver', 'true');
+    alert("🚫 Test Over! Your Score: " + score + "%");
+
+    // Send score via mailto
+    const email = "4yousuraj@gmail.com"; // <-- Change to your email address
+    const subject = encodeURIComponent("Quiz Test Score");
+    const body = encodeURIComponent(`My test is over. My final score is: ${score}%`);
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+
+    // Optionally disable the whole page
+    document.body.innerHTML = "<h1 style='color: red; text-align: center;'>Test Over</h1>";
+  }
+
+  // Detect right-click
+  document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    showWarning("⚠️ Right-clicking is not allowed during the quiz.");
+  });
+
+  // Detect tab change
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') {
+      showWarning("⚠️ Switching tabs is not allowed during the quiz.");
+    }
+  });
+
+  // Detect text selection
+  document.addEventListener('selectstart', function (e) {
+    e.preventDefault();
+    showWarning("⚠️ Text selection is not allowed during the quiz.");
+  });
+
+  // Calculate dynamic score
+  function calculateScore() {
+    let correctAnswers = 0;
+    let totalQuestions = 0;
+
+    // Assume each question has class 'question' and correct option has class 'correct'
+    const questions = document.querySelectorAll('.question');
+
+    questions.forEach((question) => {
+      totalQuestions++;
+
+      const selectedOption = question.querySelector('input[type="radio"]:checked, input[type="checkbox"]:checked');
+
+      if (selectedOption && selectedOption.classList.contains('correct')) {
+        correctAnswers++;
+      }
+    });
+
+    if (totalQuestions === 0) return 0;
+    return Math.round((correctAnswers / totalQuestions) * 100); // Return percentage
+  }
+</script>
+  </script>
+</body>
+</html>
